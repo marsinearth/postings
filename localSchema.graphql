@@ -1,0 +1,7 @@
+extend type query_root {
+  viewer: Viewer
+}
+
+type Viewer {
+  user: User
+}

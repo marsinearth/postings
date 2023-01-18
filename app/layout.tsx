@@ -1,18 +1,30 @@
-import './globals.css'
+"use client";
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+import { TokenContext, TokenProvider } from "@/src/contexts/tokenContext";
+import { createEnvironment } from "@/src/relay/environment";
+import { ReactNode, useContext } from "react";
+import { RelayEnvironmentProvider } from "react-relay";
+
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
-      {/*
-        <head /> will contain the components returned by the nearest parent
-        head.tsx. Find out more at https://beta.nextjs.org/docs/api-reference/file-conventions/head
-      */}
-      <head />
-      <body>{children}</body>
+      <head>
+        <title>Postings</title>
+      </head>
+      <TokenProvider>
+        <RelayEnvironmentContainer>{children}</RelayEnvironmentContainer>
+      </TokenProvider>
     </html>
-  )
+  );
+}
+
+function RelayEnvironmentContainer({ children }: { children: ReactNode }) {
+  const { token } = useContext(TokenContext);
+  const environment = createEnvironment(token);
+
+  return (
+    <RelayEnvironmentProvider environment={environment}>
+      <body>{children}</body>
+    </RelayEnvironmentProvider>
+  );
 }

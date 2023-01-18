@@ -1,0 +1,1939 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""whether this query should be cached (Hasura Cloud only)"""
+directive @cached(
+  """measured in seconds"""
+  ttl: Int! = 60
+
+  """refresh the cache entry"""
+  refresh: Boolean! = false
+) on QUERY
+
+"""
+columns and relationships of "Comment"
+"""
+type Comment implements Node {
+  """An array relationship"""
+  Likes(
+    """distinct select on columns"""
+    distinct_on: [Like_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [Like_order_by!]
+
+    """filter the rows returned"""
+    where: Like_bool_exp
+  ): [Like!]!
+
+  """An aggregate relationship"""
+  Likes_aggregate(
+    """distinct select on columns"""
+    distinct_on: [Like_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [Like_order_by!]
+
+    """filter the rows returned"""
+    where: Like_bool_exp
+  ): Like_aggregate!
+
+  """An array relationship connection"""
+  Likes_connection(
+    after: String
+    before: String
+
+    """distinct select on columns"""
+    distinct_on: [Like_select_column!]
+    first: Int
+    last: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [Like_order_by!]
+
+    """filter the rows returned"""
+    where: Like_bool_exp
+  ): LikeConnection!
+
+  """An object relationship"""
+  Post: Post!
+
+  """An object relationship"""
+  User: User
+  author: uuid
+  content: String!
+  created_at: timestamptz!
+  id: ID!
+  parentComment: uuid
+  post: uuid!
+  updated_at: timestamptz!
+}
+
+"""
+A Relay connection object on "Comment"
+"""
+type CommentConnection {
+  edges: [CommentEdge!]!
+  pageInfo: PageInfo!
+}
+
+type CommentEdge {
+  cursor: String!
+  node: Comment!
+}
+
+"""
+aggregated selection of "Comment"
+"""
+type Comment_aggregate {
+  aggregate: Comment_aggregate_fields
+  nodes: [Comment!]!
+}
+
+input Comment_aggregate_bool_exp {
+  count: Comment_aggregate_bool_exp_count
+}
+
+input Comment_aggregate_bool_exp_count {
+  arguments: [Comment_select_column!]
+  distinct: Boolean
+  filter: Comment_bool_exp
+  predicate: Int_comparison_exp!
+}
+
+"""
+aggregate fields of "Comment"
+"""
+type Comment_aggregate_fields {
+  count(columns: [Comment_select_column!], distinct: Boolean): Int!
+  max: Comment_max_fields
+  min: Comment_min_fields
+}
+
+"""
+order by aggregate values of table "Comment"
+"""
+input Comment_aggregate_order_by {
+  count: order_by
+  max: Comment_max_order_by
+  min: Comment_min_order_by
+}
+
+"""
+input type for inserting array relation for remote table "Comment"
+"""
+input Comment_arr_rel_insert_input {
+  data: [Comment_insert_input!]!
+
+  """upsert condition"""
+  on_conflict: Comment_on_conflict
+}
+
+"""
+Boolean expression to filter rows from the table "Comment". All fields are combined with a logical 'AND'.
+"""
+input Comment_bool_exp {
+  Likes: Like_bool_exp
+  Likes_aggregate: Like_aggregate_bool_exp
+  Post: Post_bool_exp
+  User: User_bool_exp
+  _and: [Comment_bool_exp!]
+  _not: Comment_bool_exp
+  _or: [Comment_bool_exp!]
+  author: uuid_comparison_exp
+  content: String_comparison_exp
+  created_at: timestamptz_comparison_exp
+  id: uuid_comparison_exp
+  parentComment: uuid_comparison_exp
+  post: uuid_comparison_exp
+  updated_at: timestamptz_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "Comment"
+"""
+enum Comment_constraint {
+  """
+  unique or primary key constraint on columns "id"
+  """
+  Comment_pkey
+}
+
+"""
+input type for inserting data into table "Comment"
+"""
+input Comment_insert_input {
+  Likes: Like_arr_rel_insert_input
+  Post: Post_obj_rel_insert_input
+  User: User_obj_rel_insert_input
+  author: uuid
+  content: String
+  created_at: timestamptz
+  id: uuid
+  parentComment: uuid
+  post: uuid
+  updated_at: timestamptz
+}
+
+"""aggregate max on columns"""
+type Comment_max_fields {
+  author: uuid
+  content: String
+  created_at: timestamptz
+  id: uuid
+  parentComment: uuid
+  post: uuid
+  updated_at: timestamptz
+}
+
+"""
+order by max() on columns of table "Comment"
+"""
+input Comment_max_order_by {
+  author: order_by
+  content: order_by
+  created_at: order_by
+  id: order_by
+  parentComment: order_by
+  post: order_by
+  updated_at: order_by
+}
+
+"""aggregate min on columns"""
+type Comment_min_fields {
+  author: uuid
+  content: String
+  created_at: timestamptz
+  id: uuid
+  parentComment: uuid
+  post: uuid
+  updated_at: timestamptz
+}
+
+"""
+order by min() on columns of table "Comment"
+"""
+input Comment_min_order_by {
+  author: order_by
+  content: order_by
+  created_at: order_by
+  id: order_by
+  parentComment: order_by
+  post: order_by
+  updated_at: order_by
+}
+
+"""
+response of any mutation on the table "Comment"
+"""
+type Comment_mutation_response {
+  """number of rows affected by the mutation"""
+  affected_rows: Int!
+
+  """data from the rows affected by the mutation"""
+  returning: [Comment!]!
+}
+
+"""
+input type for inserting object relation for remote table "Comment"
+"""
+input Comment_obj_rel_insert_input {
+  data: Comment_insert_input!
+
+  """upsert condition"""
+  on_conflict: Comment_on_conflict
+}
+
+"""
+on_conflict condition type for table "Comment"
+"""
+input Comment_on_conflict {
+  constraint: Comment_constraint!
+  update_columns: [Comment_update_column!]! = []
+  where: Comment_bool_exp
+}
+
+"""Ordering options when selecting data from "Comment"."""
+input Comment_order_by {
+  Likes_aggregate: Like_aggregate_order_by
+  Post: Post_order_by
+  User: User_order_by
+  author: order_by
+  content: order_by
+  created_at: order_by
+  id: order_by
+  parentComment: order_by
+  post: order_by
+  updated_at: order_by
+}
+
+"""primary key columns input for table: Comment"""
+input Comment_pk_columns_input {
+  id: uuid!
+}
+
+"""
+select columns of table "Comment"
+"""
+enum Comment_select_column {
+  """column name"""
+  author
+
+  """column name"""
+  content
+
+  """column name"""
+  created_at
+
+  """column name"""
+  id
+
+  """column name"""
+  parentComment
+
+  """column name"""
+  post
+
+  """column name"""
+  updated_at
+}
+
+"""
+input type for updating data in table "Comment"
+"""
+input Comment_set_input {
+  author: uuid
+  content: String
+  created_at: timestamptz
+  id: uuid
+  parentComment: uuid
+  post: uuid
+  updated_at: timestamptz
+}
+
+"""
+update columns of table "Comment"
+"""
+enum Comment_update_column {
+  """column name"""
+  author
+
+  """column name"""
+  content
+
+  """column name"""
+  created_at
+
+  """column name"""
+  id
+
+  """column name"""
+  parentComment
+
+  """column name"""
+  post
+
+  """column name"""
+  updated_at
+}
+
+input Comment_updates {
+  """sets the columns of the filtered rows to the given values"""
+  _set: Comment_set_input
+  where: Comment_bool_exp!
+}
+
+"""
+Boolean expression to compare columns of type "Int". All fields are combined with logical 'AND'.
+"""
+input Int_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+"""
+columns and relationships of "Like"
+"""
+type Like implements Node {
+  """An object relationship"""
+  Comment: Comment
+
+  """An object relationship"""
+  Post: Post
+
+  """An object relationship"""
+  User: User!
+  created_at: timestamptz!
+  id: ID!
+  likedComment: uuid
+  likedPost: uuid
+  likedUser: uuid!
+}
+
+"""
+A Relay connection object on "Like"
+"""
+type LikeConnection {
+  edges: [LikeEdge!]!
+  pageInfo: PageInfo!
+}
+
+type LikeEdge {
+  cursor: String!
+  node: Like!
+}
+
+"""
+aggregated selection of "Like"
+"""
+type Like_aggregate {
+  aggregate: Like_aggregate_fields
+  nodes: [Like!]!
+}
+
+input Like_aggregate_bool_exp {
+  count: Like_aggregate_bool_exp_count
+}
+
+input Like_aggregate_bool_exp_count {
+  arguments: [Like_select_column!]
+  distinct: Boolean
+  filter: Like_bool_exp
+  predicate: Int_comparison_exp!
+}
+
+"""
+aggregate fields of "Like"
+"""
+type Like_aggregate_fields {
+  count(columns: [Like_select_column!], distinct: Boolean): Int!
+  max: Like_max_fields
+  min: Like_min_fields
+}
+
+"""
+order by aggregate values of table "Like"
+"""
+input Like_aggregate_order_by {
+  count: order_by
+  max: Like_max_order_by
+  min: Like_min_order_by
+}
+
+"""
+input type for inserting array relation for remote table "Like"
+"""
+input Like_arr_rel_insert_input {
+  data: [Like_insert_input!]!
+
+  """upsert condition"""
+  on_conflict: Like_on_conflict
+}
+
+"""
+Boolean expression to filter rows from the table "Like". All fields are combined with a logical 'AND'.
+"""
+input Like_bool_exp {
+  Comment: Comment_bool_exp
+  Post: Post_bool_exp
+  User: User_bool_exp
+  _and: [Like_bool_exp!]
+  _not: Like_bool_exp
+  _or: [Like_bool_exp!]
+  created_at: timestamptz_comparison_exp
+  id: uuid_comparison_exp
+  likedComment: uuid_comparison_exp
+  likedPost: uuid_comparison_exp
+  likedUser: uuid_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "Like"
+"""
+enum Like_constraint {
+  """
+  unique or primary key constraint on columns "id"
+  """
+  Like_pkey
+}
+
+"""
+input type for inserting data into table "Like"
+"""
+input Like_insert_input {
+  Comment: Comment_obj_rel_insert_input
+  Post: Post_obj_rel_insert_input
+  User: User_obj_rel_insert_input
+  created_at: timestamptz
+  id: uuid
+  likedComment: uuid
+  likedPost: uuid
+  likedUser: uuid
+}
+
+"""aggregate max on columns"""
+type Like_max_fields {
+  created_at: timestamptz
+  id: uuid
+  likedComment: uuid
+  likedPost: uuid
+  likedUser: uuid
+}
+
+"""
+order by max() on columns of table "Like"
+"""
+input Like_max_order_by {
+  created_at: order_by
+  id: order_by
+  likedComment: order_by
+  likedPost: order_by
+  likedUser: order_by
+}
+
+"""aggregate min on columns"""
+type Like_min_fields {
+  created_at: timestamptz
+  id: uuid
+  likedComment: uuid
+  likedPost: uuid
+  likedUser: uuid
+}
+
+"""
+order by min() on columns of table "Like"
+"""
+input Like_min_order_by {
+  created_at: order_by
+  id: order_by
+  likedComment: order_by
+  likedPost: order_by
+  likedUser: order_by
+}
+
+"""
+response of any mutation on the table "Like"
+"""
+type Like_mutation_response {
+  """number of rows affected by the mutation"""
+  affected_rows: Int!
+
+  """data from the rows affected by the mutation"""
+  returning: [Like!]!
+}
+
+"""
+on_conflict condition type for table "Like"
+"""
+input Like_on_conflict {
+  constraint: Like_constraint!
+  update_columns: [Like_update_column!]! = []
+  where: Like_bool_exp
+}
+
+"""Ordering options when selecting data from "Like"."""
+input Like_order_by {
+  Comment: Comment_order_by
+  Post: Post_order_by
+  User: User_order_by
+  created_at: order_by
+  id: order_by
+  likedComment: order_by
+  likedPost: order_by
+  likedUser: order_by
+}
+
+"""primary key columns input for table: Like"""
+input Like_pk_columns_input {
+  id: uuid!
+}
+
+"""
+select columns of table "Like"
+"""
+enum Like_select_column {
+  """column name"""
+  created_at
+
+  """column name"""
+  id
+
+  """column name"""
+  likedComment
+
+  """column name"""
+  likedPost
+
+  """column name"""
+  likedUser
+}
+
+"""
+input type for updating data in table "Like"
+"""
+input Like_set_input {
+  created_at: timestamptz
+  id: uuid
+  likedComment: uuid
+  likedPost: uuid
+  likedUser: uuid
+}
+
+"""
+update columns of table "Like"
+"""
+enum Like_update_column {
+  """column name"""
+  created_at
+
+  """column name"""
+  id
+
+  """column name"""
+  likedComment
+
+  """column name"""
+  likedPost
+
+  """column name"""
+  likedUser
+}
+
+input Like_updates {
+  """sets the columns of the filtered rows to the given values"""
+  _set: Like_set_input
+  where: Like_bool_exp!
+}
+
+"""An object with globally unique ID"""
+interface Node {
+  """A globally unique identifier"""
+  id: ID!
+}
+
+type PageInfo {
+  endCursor: String!
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String!
+}
+
+"""
+columns and relationships of "Post"
+"""
+type Post implements Node {
+  """An array relationship"""
+  Comments(
+    """distinct select on columns"""
+    distinct_on: [Comment_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [Comment_order_by!]
+
+    """filter the rows returned"""
+    where: Comment_bool_exp
+  ): [Comment!]!
+
+  """An aggregate relationship"""
+  Comments_aggregate(
+    """distinct select on columns"""
+    distinct_on: [Comment_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [Comment_order_by!]
+
+    """filter the rows returned"""
+    where: Comment_bool_exp
+  ): Comment_aggregate!
+
+  """An array relationship connection"""
+  Comments_connection(
+    after: String
+    before: String
+
+    """distinct select on columns"""
+    distinct_on: [Comment_select_column!]
+    first: Int
+    last: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [Comment_order_by!]
+
+    """filter the rows returned"""
+    where: Comment_bool_exp
+  ): CommentConnection!
+
+  """An array relationship"""
+  Likes(
+    """distinct select on columns"""
+    distinct_on: [Like_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [Like_order_by!]
+
+    """filter the rows returned"""
+    where: Like_bool_exp
+  ): [Like!]!
+
+  """An aggregate relationship"""
+  Likes_aggregate(
+    """distinct select on columns"""
+    distinct_on: [Like_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [Like_order_by!]
+
+    """filter the rows returned"""
+    where: Like_bool_exp
+  ): Like_aggregate!
+
+  """An array relationship connection"""
+  Likes_connection(
+    after: String
+    before: String
+
+    """distinct select on columns"""
+    distinct_on: [Like_select_column!]
+    first: Int
+    last: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [Like_order_by!]
+
+    """filter the rows returned"""
+    where: Like_bool_exp
+  ): LikeConnection!
+
+  """An object relationship"""
+  User: User
+  author: uuid
+  created_at: timestamptz!
+  desc: String!
+  id: ID!
+  img_url: String
+  link_url: String!
+  updated_at: timestamptz!
+}
+
+"""
+A Relay connection object on "Post"
+"""
+type PostConnection {
+  edges: [PostEdge!]!
+  pageInfo: PageInfo!
+}
+
+type PostEdge {
+  cursor: String!
+  node: Post!
+}
+
+"""
+aggregated selection of "Post"
+"""
+type Post_aggregate {
+  aggregate: Post_aggregate_fields
+  nodes: [Post!]!
+}
+
+input Post_aggregate_bool_exp {
+  count: Post_aggregate_bool_exp_count
+}
+
+input Post_aggregate_bool_exp_count {
+  arguments: [Post_select_column!]
+  distinct: Boolean
+  filter: Post_bool_exp
+  predicate: Int_comparison_exp!
+}
+
+"""
+aggregate fields of "Post"
+"""
+type Post_aggregate_fields {
+  count(columns: [Post_select_column!], distinct: Boolean): Int!
+  max: Post_max_fields
+  min: Post_min_fields
+}
+
+"""
+order by aggregate values of table "Post"
+"""
+input Post_aggregate_order_by {
+  count: order_by
+  max: Post_max_order_by
+  min: Post_min_order_by
+}
+
+"""
+input type for inserting array relation for remote table "Post"
+"""
+input Post_arr_rel_insert_input {
+  data: [Post_insert_input!]!
+
+  """upsert condition"""
+  on_conflict: Post_on_conflict
+}
+
+"""
+Boolean expression to filter rows from the table "Post". All fields are combined with a logical 'AND'.
+"""
+input Post_bool_exp {
+  Comments: Comment_bool_exp
+  Comments_aggregate: Comment_aggregate_bool_exp
+  Likes: Like_bool_exp
+  Likes_aggregate: Like_aggregate_bool_exp
+  User: User_bool_exp
+  _and: [Post_bool_exp!]
+  _not: Post_bool_exp
+  _or: [Post_bool_exp!]
+  author: uuid_comparison_exp
+  created_at: timestamptz_comparison_exp
+  desc: String_comparison_exp
+  id: uuid_comparison_exp
+  img_url: String_comparison_exp
+  link_url: String_comparison_exp
+  updated_at: timestamptz_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "Post"
+"""
+enum Post_constraint {
+  """
+  unique or primary key constraint on columns "id"
+  """
+  Post_pkey
+}
+
+"""
+input type for inserting data into table "Post"
+"""
+input Post_insert_input {
+  Comments: Comment_arr_rel_insert_input
+  Likes: Like_arr_rel_insert_input
+  User: User_obj_rel_insert_input
+  author: uuid
+  created_at: timestamptz
+  desc: String
+  id: uuid
+  img_url: String
+  link_url: String
+  updated_at: timestamptz
+}
+
+"""aggregate max on columns"""
+type Post_max_fields {
+  author: uuid
+  created_at: timestamptz
+  desc: String
+  id: uuid
+  img_url: String
+  link_url: String
+  updated_at: timestamptz
+}
+
+"""
+order by max() on columns of table "Post"
+"""
+input Post_max_order_by {
+  author: order_by
+  created_at: order_by
+  desc: order_by
+  id: order_by
+  img_url: order_by
+  link_url: order_by
+  updated_at: order_by
+}
+
+"""aggregate min on columns"""
+type Post_min_fields {
+  author: uuid
+  created_at: timestamptz
+  desc: String
+  id: uuid
+  img_url: String
+  link_url: String
+  updated_at: timestamptz
+}
+
+"""
+order by min() on columns of table "Post"
+"""
+input Post_min_order_by {
+  author: order_by
+  created_at: order_by
+  desc: order_by
+  id: order_by
+  img_url: order_by
+  link_url: order_by
+  updated_at: order_by
+}
+
+"""
+response of any mutation on the table "Post"
+"""
+type Post_mutation_response {
+  """number of rows affected by the mutation"""
+  affected_rows: Int!
+
+  """data from the rows affected by the mutation"""
+  returning: [Post!]!
+}
+
+"""
+input type for inserting object relation for remote table "Post"
+"""
+input Post_obj_rel_insert_input {
+  data: Post_insert_input!
+
+  """upsert condition"""
+  on_conflict: Post_on_conflict
+}
+
+"""
+on_conflict condition type for table "Post"
+"""
+input Post_on_conflict {
+  constraint: Post_constraint!
+  update_columns: [Post_update_column!]! = []
+  where: Post_bool_exp
+}
+
+"""Ordering options when selecting data from "Post"."""
+input Post_order_by {
+  Comments_aggregate: Comment_aggregate_order_by
+  Likes_aggregate: Like_aggregate_order_by
+  User: User_order_by
+  author: order_by
+  created_at: order_by
+  desc: order_by
+  id: order_by
+  img_url: order_by
+  link_url: order_by
+  updated_at: order_by
+}
+
+"""primary key columns input for table: Post"""
+input Post_pk_columns_input {
+  id: uuid!
+}
+
+"""
+select columns of table "Post"
+"""
+enum Post_select_column {
+  """column name"""
+  author
+
+  """column name"""
+  created_at
+
+  """column name"""
+  desc
+
+  """column name"""
+  id
+
+  """column name"""
+  img_url
+
+  """column name"""
+  link_url
+
+  """column name"""
+  updated_at
+}
+
+"""
+input type for updating data in table "Post"
+"""
+input Post_set_input {
+  author: uuid
+  created_at: timestamptz
+  desc: String
+  id: uuid
+  img_url: String
+  link_url: String
+  updated_at: timestamptz
+}
+
+"""
+update columns of table "Post"
+"""
+enum Post_update_column {
+  """column name"""
+  author
+
+  """column name"""
+  created_at
+
+  """column name"""
+  desc
+
+  """column name"""
+  id
+
+  """column name"""
+  img_url
+
+  """column name"""
+  link_url
+
+  """column name"""
+  updated_at
+}
+
+input Post_updates {
+  """sets the columns of the filtered rows to the given values"""
+  _set: Post_set_input
+  where: Post_bool_exp!
+}
+
+"""
+Boolean expression to compare columns of type "String". All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+
+  """does the column match the given case-insensitive pattern"""
+  _ilike: String
+  _in: [String!]
+
+  """
+  does the column match the given POSIX regular expression, case insensitive
+  """
+  _iregex: String
+  _is_null: Boolean
+
+  """does the column match the given pattern"""
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+
+  """does the column NOT match the given case-insensitive pattern"""
+  _nilike: String
+  _nin: [String!]
+
+  """
+  does the column NOT match the given POSIX regular expression, case insensitive
+  """
+  _niregex: String
+
+  """does the column NOT match the given pattern"""
+  _nlike: String
+
+  """
+  does the column NOT match the given POSIX regular expression, case sensitive
+  """
+  _nregex: String
+
+  """does the column NOT match the given SQL regular expression"""
+  _nsimilar: String
+
+  """
+  does the column match the given POSIX regular expression, case sensitive
+  """
+  _regex: String
+
+  """does the column match the given SQL regular expression"""
+  _similar: String
+}
+
+"""
+columns and relationships of "User"
+"""
+type User implements Node {
+  """An array relationship"""
+  Comments(
+    """distinct select on columns"""
+    distinct_on: [Comment_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [Comment_order_by!]
+
+    """filter the rows returned"""
+    where: Comment_bool_exp
+  ): [Comment!]!
+
+  """An aggregate relationship"""
+  Comments_aggregate(
+    """distinct select on columns"""
+    distinct_on: [Comment_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [Comment_order_by!]
+
+    """filter the rows returned"""
+    where: Comment_bool_exp
+  ): Comment_aggregate!
+
+  """An array relationship connection"""
+  Comments_connection(
+    after: String
+    before: String
+
+    """distinct select on columns"""
+    distinct_on: [Comment_select_column!]
+    first: Int
+    last: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [Comment_order_by!]
+
+    """filter the rows returned"""
+    where: Comment_bool_exp
+  ): CommentConnection!
+
+  """An array relationship"""
+  Likes(
+    """distinct select on columns"""
+    distinct_on: [Like_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [Like_order_by!]
+
+    """filter the rows returned"""
+    where: Like_bool_exp
+  ): [Like!]!
+
+  """An aggregate relationship"""
+  Likes_aggregate(
+    """distinct select on columns"""
+    distinct_on: [Like_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [Like_order_by!]
+
+    """filter the rows returned"""
+    where: Like_bool_exp
+  ): Like_aggregate!
+
+  """An array relationship connection"""
+  Likes_connection(
+    after: String
+    before: String
+
+    """distinct select on columns"""
+    distinct_on: [Like_select_column!]
+    first: Int
+    last: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [Like_order_by!]
+
+    """filter the rows returned"""
+    where: Like_bool_exp
+  ): LikeConnection!
+
+  """An array relationship"""
+  Posts(
+    """distinct select on columns"""
+    distinct_on: [Post_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [Post_order_by!]
+
+    """filter the rows returned"""
+    where: Post_bool_exp
+  ): [Post!]!
+
+  """An aggregate relationship"""
+  Posts_aggregate(
+    """distinct select on columns"""
+    distinct_on: [Post_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [Post_order_by!]
+
+    """filter the rows returned"""
+    where: Post_bool_exp
+  ): Post_aggregate!
+
+  """An array relationship connection"""
+  Posts_connection(
+    after: String
+    before: String
+
+    """distinct select on columns"""
+    distinct_on: [Post_select_column!]
+    first: Int
+    last: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [Post_order_by!]
+
+    """filter the rows returned"""
+    where: Post_bool_exp
+  ): PostConnection!
+  comments: uuid
+  created_at: timestamptz!
+  email: String!
+  id: ID!
+  likes: uuid
+  name: String!
+  posts: uuid
+  updated_at: timestamptz!
+}
+
+"""
+A Relay connection object on "User"
+"""
+type UserConnection {
+  edges: [UserEdge!]!
+  pageInfo: PageInfo!
+}
+
+type UserEdge {
+  cursor: String!
+  node: User!
+}
+
+"""
+Boolean expression to filter rows from the table "User". All fields are combined with a logical 'AND'.
+"""
+input User_bool_exp {
+  Comments: Comment_bool_exp
+  Comments_aggregate: Comment_aggregate_bool_exp
+  Likes: Like_bool_exp
+  Likes_aggregate: Like_aggregate_bool_exp
+  Posts: Post_bool_exp
+  Posts_aggregate: Post_aggregate_bool_exp
+  _and: [User_bool_exp!]
+  _not: User_bool_exp
+  _or: [User_bool_exp!]
+  comments: uuid_comparison_exp
+  created_at: timestamptz_comparison_exp
+  email: String_comparison_exp
+  id: uuid_comparison_exp
+  likes: uuid_comparison_exp
+  name: String_comparison_exp
+  posts: uuid_comparison_exp
+  updated_at: timestamptz_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "User"
+"""
+enum User_constraint {
+  """
+  unique or primary key constraint on columns "email"
+  """
+  User_email_key
+
+  """
+  unique or primary key constraint on columns "id"
+  """
+  User_id_key
+
+  """
+  unique or primary key constraint on columns "name", "id"
+  """
+  User_pkey
+}
+
+"""
+input type for inserting data into table "User"
+"""
+input User_insert_input {
+  Comments: Comment_arr_rel_insert_input
+  Likes: Like_arr_rel_insert_input
+  Posts: Post_arr_rel_insert_input
+  comments: uuid
+  created_at: timestamptz
+  email: String
+  id: uuid
+  likes: uuid
+  name: String
+  posts: uuid
+  updated_at: timestamptz
+}
+
+"""
+response of any mutation on the table "User"
+"""
+type User_mutation_response {
+  """number of rows affected by the mutation"""
+  affected_rows: Int!
+
+  """data from the rows affected by the mutation"""
+  returning: [User!]!
+}
+
+"""
+input type for inserting object relation for remote table "User"
+"""
+input User_obj_rel_insert_input {
+  data: User_insert_input!
+
+  """upsert condition"""
+  on_conflict: User_on_conflict
+}
+
+"""
+on_conflict condition type for table "User"
+"""
+input User_on_conflict {
+  constraint: User_constraint!
+  update_columns: [User_update_column!]! = []
+  where: User_bool_exp
+}
+
+"""Ordering options when selecting data from "User"."""
+input User_order_by {
+  Comments_aggregate: Comment_aggregate_order_by
+  Likes_aggregate: Like_aggregate_order_by
+  Posts_aggregate: Post_aggregate_order_by
+  comments: order_by
+  created_at: order_by
+  email: order_by
+  id: order_by
+  likes: order_by
+  name: order_by
+  posts: order_by
+  updated_at: order_by
+}
+
+"""primary key columns input for table: User"""
+input User_pk_columns_input {
+  id: uuid!
+  name: String!
+}
+
+"""
+select columns of table "User"
+"""
+enum User_select_column {
+  """column name"""
+  comments
+
+  """column name"""
+  created_at
+
+  """column name"""
+  email
+
+  """column name"""
+  id
+
+  """column name"""
+  likes
+
+  """column name"""
+  name
+
+  """column name"""
+  posts
+
+  """column name"""
+  updated_at
+}
+
+"""
+input type for updating data in table "User"
+"""
+input User_set_input {
+  comments: uuid
+  created_at: timestamptz
+  email: String
+  id: uuid
+  likes: uuid
+  name: String
+  posts: uuid
+  updated_at: timestamptz
+}
+
+"""
+update columns of table "User"
+"""
+enum User_update_column {
+  """column name"""
+  comments
+
+  """column name"""
+  created_at
+
+  """column name"""
+  email
+
+  """column name"""
+  id
+
+  """column name"""
+  likes
+
+  """column name"""
+  name
+
+  """column name"""
+  posts
+
+  """column name"""
+  updated_at
+}
+
+input User_updates {
+  """sets the columns of the filtered rows to the given values"""
+  _set: User_set_input
+  where: User_bool_exp!
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "Comment"
+  """
+  delete_Comment(
+    """filter the rows which have to be deleted"""
+    where: Comment_bool_exp!
+  ): Comment_mutation_response
+
+  """
+  delete single row from the table: "Comment"
+  """
+  delete_Comment_by_pk(id: uuid!): Comment
+
+  """
+  delete data from the table: "Like"
+  """
+  delete_Like(
+    """filter the rows which have to be deleted"""
+    where: Like_bool_exp!
+  ): Like_mutation_response
+
+  """
+  delete single row from the table: "Like"
+  """
+  delete_Like_by_pk(id: uuid!): Like
+
+  """
+  delete data from the table: "Post"
+  """
+  delete_Post(
+    """filter the rows which have to be deleted"""
+    where: Post_bool_exp!
+  ): Post_mutation_response
+
+  """
+  delete single row from the table: "Post"
+  """
+  delete_Post_by_pk(id: uuid!): Post
+
+  """
+  delete data from the table: "User"
+  """
+  delete_User(
+    """filter the rows which have to be deleted"""
+    where: User_bool_exp!
+  ): User_mutation_response
+
+  """
+  delete single row from the table: "User"
+  """
+  delete_User_by_pk(id: uuid!, name: String!): User
+
+  """
+  insert data into the table: "Comment"
+  """
+  insert_Comment(
+    """the rows to be inserted"""
+    objects: [Comment_insert_input!]!
+
+    """upsert condition"""
+    on_conflict: Comment_on_conflict
+  ): Comment_mutation_response
+
+  """
+  insert a single row into the table: "Comment"
+  """
+  insert_Comment_one(
+    """the row to be inserted"""
+    object: Comment_insert_input!
+
+    """upsert condition"""
+    on_conflict: Comment_on_conflict
+  ): Comment
+
+  """
+  insert data into the table: "Like"
+  """
+  insert_Like(
+    """the rows to be inserted"""
+    objects: [Like_insert_input!]!
+
+    """upsert condition"""
+    on_conflict: Like_on_conflict
+  ): Like_mutation_response
+
+  """
+  insert a single row into the table: "Like"
+  """
+  insert_Like_one(
+    """the row to be inserted"""
+    object: Like_insert_input!
+
+    """upsert condition"""
+    on_conflict: Like_on_conflict
+  ): Like
+
+  """
+  insert data into the table: "Post"
+  """
+  insert_Post(
+    """the rows to be inserted"""
+    objects: [Post_insert_input!]!
+
+    """upsert condition"""
+    on_conflict: Post_on_conflict
+  ): Post_mutation_response
+
+  """
+  insert a single row into the table: "Post"
+  """
+  insert_Post_one(
+    """the row to be inserted"""
+    object: Post_insert_input!
+
+    """upsert condition"""
+    on_conflict: Post_on_conflict
+  ): Post
+
+  """
+  insert data into the table: "User"
+  """
+  insert_User(
+    """the rows to be inserted"""
+    objects: [User_insert_input!]!
+
+    """upsert condition"""
+    on_conflict: User_on_conflict
+  ): User_mutation_response
+
+  """
+  insert a single row into the table: "User"
+  """
+  insert_User_one(
+    """the row to be inserted"""
+    object: User_insert_input!
+
+    """upsert condition"""
+    on_conflict: User_on_conflict
+  ): User
+
+  """
+  update data of the table: "Comment"
+  """
+  update_Comment(
+    """sets the columns of the filtered rows to the given values"""
+    _set: Comment_set_input
+
+    """filter the rows which have to be updated"""
+    where: Comment_bool_exp!
+  ): Comment_mutation_response
+
+  """
+  update single row of the table: "Comment"
+  """
+  update_Comment_by_pk(
+    """sets the columns of the filtered rows to the given values"""
+    _set: Comment_set_input
+    pk_columns: Comment_pk_columns_input!
+  ): Comment
+
+  """
+  update multiples rows of table: "Comment"
+  """
+  update_Comment_many(
+    """updates to execute, in order"""
+    updates: [Comment_updates!]!
+  ): [Comment_mutation_response]
+
+  """
+  update data of the table: "Like"
+  """
+  update_Like(
+    """sets the columns of the filtered rows to the given values"""
+    _set: Like_set_input
+
+    """filter the rows which have to be updated"""
+    where: Like_bool_exp!
+  ): Like_mutation_response
+
+  """
+  update single row of the table: "Like"
+  """
+  update_Like_by_pk(
+    """sets the columns of the filtered rows to the given values"""
+    _set: Like_set_input
+    pk_columns: Like_pk_columns_input!
+  ): Like
+
+  """
+  update multiples rows of table: "Like"
+  """
+  update_Like_many(
+    """updates to execute, in order"""
+    updates: [Like_updates!]!
+  ): [Like_mutation_response]
+
+  """
+  update data of the table: "Post"
+  """
+  update_Post(
+    """sets the columns of the filtered rows to the given values"""
+    _set: Post_set_input
+
+    """filter the rows which have to be updated"""
+    where: Post_bool_exp!
+  ): Post_mutation_response
+
+  """
+  update single row of the table: "Post"
+  """
+  update_Post_by_pk(
+    """sets the columns of the filtered rows to the given values"""
+    _set: Post_set_input
+    pk_columns: Post_pk_columns_input!
+  ): Post
+
+  """
+  update multiples rows of table: "Post"
+  """
+  update_Post_many(
+    """updates to execute, in order"""
+    updates: [Post_updates!]!
+  ): [Post_mutation_response]
+
+  """
+  update data of the table: "User"
+  """
+  update_User(
+    """sets the columns of the filtered rows to the given values"""
+    _set: User_set_input
+
+    """filter the rows which have to be updated"""
+    where: User_bool_exp!
+  ): User_mutation_response
+
+  """
+  update single row of the table: "User"
+  """
+  update_User_by_pk(
+    """sets the columns of the filtered rows to the given values"""
+    _set: User_set_input
+    pk_columns: User_pk_columns_input!
+  ): User
+
+  """
+  update multiples rows of table: "User"
+  """
+  update_User_many(
+    """updates to execute, in order"""
+    updates: [User_updates!]!
+  ): [User_mutation_response]
+}
+
+"""column ordering options"""
+enum order_by {
+  """in ascending order, nulls last"""
+  asc
+
+  """in ascending order, nulls first"""
+  asc_nulls_first
+
+  """in ascending order, nulls last"""
+  asc_nulls_last
+
+  """in descending order, nulls first"""
+  desc
+
+  """in descending order, nulls first"""
+  desc_nulls_first
+
+  """in descending order, nulls last"""
+  desc_nulls_last
+}
+
+type query_root {
+  """
+  fetch data from the table: "Comment"
+  """
+  Comment_connection(
+    after: String
+    before: String
+
+    """distinct select on columns"""
+    distinct_on: [Comment_select_column!]
+    first: Int
+    last: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [Comment_order_by!]
+
+    """filter the rows returned"""
+    where: Comment_bool_exp
+  ): CommentConnection!
+
+  """
+  fetch data from the table: "Like"
+  """
+  Like_connection(
+    after: String
+    before: String
+
+    """distinct select on columns"""
+    distinct_on: [Like_select_column!]
+    first: Int
+    last: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [Like_order_by!]
+
+    """filter the rows returned"""
+    where: Like_bool_exp
+  ): LikeConnection!
+
+  """
+  fetch data from the table: "Post"
+  """
+  Post_connection(
+    after: String
+    before: String
+
+    """distinct select on columns"""
+    distinct_on: [Post_select_column!]
+    first: Int
+    last: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [Post_order_by!]
+
+    """filter the rows returned"""
+    where: Post_bool_exp
+  ): PostConnection!
+
+  """
+  fetch data from the table: "User"
+  """
+  User_connection(
+    after: String
+    before: String
+
+    """distinct select on columns"""
+    distinct_on: [User_select_column!]
+    first: Int
+    last: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [User_order_by!]
+
+    """filter the rows returned"""
+    where: User_bool_exp
+  ): UserConnection!
+  node(
+    """A globally unique id"""
+    id: ID!
+  ): Node
+}
+
+type subscription_root {
+  """
+  fetch data from the table: "Comment"
+  """
+  Comment_connection(
+    after: String
+    before: String
+
+    """distinct select on columns"""
+    distinct_on: [Comment_select_column!]
+    first: Int
+    last: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [Comment_order_by!]
+
+    """filter the rows returned"""
+    where: Comment_bool_exp
+  ): CommentConnection!
+
+  """
+  fetch data from the table: "Like"
+  """
+  Like_connection(
+    after: String
+    before: String
+
+    """distinct select on columns"""
+    distinct_on: [Like_select_column!]
+    first: Int
+    last: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [Like_order_by!]
+
+    """filter the rows returned"""
+    where: Like_bool_exp
+  ): LikeConnection!
+
+  """
+  fetch data from the table: "Post"
+  """
+  Post_connection(
+    after: String
+    before: String
+
+    """distinct select on columns"""
+    distinct_on: [Post_select_column!]
+    first: Int
+    last: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [Post_order_by!]
+
+    """filter the rows returned"""
+    where: Post_bool_exp
+  ): PostConnection!
+
+  """
+  fetch data from the table: "User"
+  """
+  User_connection(
+    after: String
+    before: String
+
+    """distinct select on columns"""
+    distinct_on: [User_select_column!]
+    first: Int
+    last: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [User_order_by!]
+
+    """filter the rows returned"""
+    where: User_bool_exp
+  ): UserConnection!
+  node(
+    """A globally unique id"""
+    id: ID!
+  ): Node
+}
+
+scalar timestamptz
+
+"""
+Boolean expression to compare columns of type "timestamptz". All fields are combined with logical 'AND'.
+"""
+input timestamptz_comparison_exp {
+  _eq: timestamptz
+  _gt: timestamptz
+  _gte: timestamptz
+  _in: [timestamptz!]
+  _is_null: Boolean
+  _lt: timestamptz
+  _lte: timestamptz
+  _neq: timestamptz
+  _nin: [timestamptz!]
+}
+
+scalar uuid
+
+"""
+Boolean expression to compare columns of type "uuid". All fields are combined with logical 'AND'.
+"""
+input uuid_comparison_exp {
+  _eq: uuid
+  _gt: uuid
+  _gte: uuid
+  _in: [uuid!]
+  _is_null: Boolean
+  _lt: uuid
+  _lte: uuid
+  _neq: uuid
+  _nin: [uuid!]
+}
+

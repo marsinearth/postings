@@ -1,0 +1,7 @@
+{
+  "src": "./",
+  "language": "typescript",
+  "schema": "schema.graphql",
+  "schemaExtensions": ["localSchema.graphql"],
+  "artifactDirectory": "__generated__"
+}

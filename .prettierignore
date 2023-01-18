@@ -1,0 +1,5 @@
+# Ignore artifacts:
+__generated__
+.next
+.prettier-cache
+.yarn
