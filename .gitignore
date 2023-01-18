@@ -38,6 +38,9 @@ next-env.d.ts
 # prettier
 .prettier-cache
 
+# relay
+__generated__/*
+
 ### yarn ###
 # Not using Zero-Install
 .pnp.*
