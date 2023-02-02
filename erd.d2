@@ -64,15 +64,15 @@ Like: {
 
 # relations
 
-Member.group -> Group.id
+Member.group -> Group.id: Participating
 Member.user -> User.id
 
-Post.author -> User.id
+Post.author -> User.id: Post author
 
-Comment.parentComment -> Comment.id
-Comment.author -> User.id
-Comment.post -> Post.id
+Comment.parentComment -> Comment.id: if replied on another Comment
+Comment.author -> User.id: Comment author
+Comment.post -> Post.id: parent post
 
-Like.likedUser -> User.id
-Like.likedPost -> Post.id
-Like.likedComment -> Comment.id
+Like.likedUser -> User.id: like author
+Like.likedPost -> Post.id: if liked a post
+Like.likedComment -> Comment.id: if liked a comment
