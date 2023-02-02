@@ -1,0 +1,78 @@
+# tables
+
+User: {
+  shape: sql_table
+  id: uuid {constraint: PK}
+  name: text {constraint: PK}
+  email: text {constraint: UNQ}
+  created_at: timestamp with time zone
+  updated_at: timestamp with time zone
+}
+
+Group: {
+  shape: sql_table
+  id: uuid {constraint: PK}
+  name: text
+  desc: text
+  profile_img: text
+  personal: boolean
+  created_at: timestamp with time zone
+  updated_at: timestamp with time zone
+}
+
+Member: {
+  shape: sql_table
+  id: uuid {constraint: PK}
+  group: uuid {constraint: FK}
+  user: uuid {constraint: FK}
+  role: text
+  active: boolean
+  created_at: timestamp with time zone
+  updated_at: timestamp with time zone
+}
+
+Post: {
+  shape: sql_table
+  id: uuid {constraint: PK}
+  img_url: text
+  link_url: text
+  desk: text
+  author: uuid {constraint: FK}
+  created_at: timestamp with time zone
+  updated_at: timestamp with time zone
+}
+
+Comment: {
+  shape: sql_table
+  id: uuid {constraint: PK}
+  content: text
+  parentComment: uuid {constraint: FK}
+  author: uuid {constraint: FK}
+  post: uuid {constraint: FK}
+  created_at: timestamp with time zone
+  updated_at: timestamp with time zone
+}
+
+Like: {
+  shape: sql_table
+  id: uuid {constraint: PK}
+  likedUser: uuid {constraint: FK}
+  likedPost: uuid {constraint: FK}
+  likedComment: uuid {constraint: FK}
+  created_at: timestamp with time zone
+}
+
+# relations
+
+Member.group -> Group.id
+Member.user -> User.id
+
+Post.author -> User.id
+
+Comment.parentComment -> Comment.id
+Comment.author -> User.id
+Comment.post -> Post.id
+
+Like.likedUser -> User.id
+Like.likedPost -> Post.id
+Like.likedComment -> Comment.id
